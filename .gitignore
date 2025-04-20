@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+.venv/
+
+# Django migrations
+*/migrations/
+
+# Database
+db.sqlite3
+
+.pyproject.toml
+
+# Static files
+media/
+static/
+
+pyproject.toml
