@@ -1,17 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-from .validators import validate_cloth_price, validate_article
+from api.validators import validate_cloth_price, validate_article
+from .common import Color, Gender
+from .brand import Brand, Category
+from .mixins import TimeStampedMixin, PublishableMixin
 
 
 class ClothType(models.Model):
     """Модель типа одежды."""
 
     name = models.CharField(max_length=50, verbose_name='Тип')
-    description = models.TextField(blank=True, verbose_name='Описание', default='')
+    description = models.TextField(
+        blank=True, verbose_name='Описание', default=''
+    )
 
     def __str__(self):
         """Строковое представления для модели."""
+
         return self.name
 
     class Meta:
@@ -19,22 +24,6 @@ class ClothType(models.Model):
 
         verbose_name = 'Тип одежды'
         verbose_name_plural = 'Типы одежды'
-
-
-class Color(models.Model):
-    """Модель цвета одежды."""
-
-    name = models.CharField(max_length=30, verbose_name='Цвет')
-
-    def __str__(self):
-        """Строковое представление для модели."""
-        return self.name
-
-    class Meta:
-        """Оформление модели в админке."""
-
-        verbose_name = 'Цвет'
-        verbose_name_plural = 'Цвета'
 
 
 class ClothesSize(models.Model):
@@ -45,6 +34,7 @@ class ClothesSize(models.Model):
 
     def __str__(self):
         """Строковое представление для модели."""
+
         return self.label
 
     class Meta:
@@ -54,35 +44,7 @@ class ClothesSize(models.Model):
         verbose_name_plural = 'Размеры'
 
 
-class Gender(models.Model):
-    """Модель гендерной принадлежности."""
-
-    name = models.CharField(max_length=20, verbose_name='Пол')
-
-    def __str__(self):
-        """Строковое представление для модели."""
-        return self.name
-
-    class Meta:
-        """Оформление модели в админке."""
-
-        verbose_name = 'Пол'
-        verbose_name_plural = 'Пол'
-
-
-class TimeStampedModel(models.Model):
-    """Кастомная модель для времени создания или обновления товара."""
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        """Флаг абстракции."""
-
-        abstract = True
-
-
-class Cloth(TimeStampedModel):
+class Cloth(TimeStampedMixin, PublishableMixin):
     """Модель одежды."""
 
     title = models.CharField(
@@ -93,6 +55,22 @@ class Cloth(TimeStampedModel):
     )
     description = models.TextField(
         blank=True, help_text='Введите описание.', verbose_name='Описание'
+    )
+    brand = models.ForeignKey(
+        Brand,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Бренд',
+        help_text='Укажите бренд одежды.'
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Категория',
+        help_text='Укажите категорию.'
     )
     article = models.IntegerField(
         validators=[validate_article],
@@ -147,7 +125,8 @@ class Cloth(TimeStampedModel):
     )
 
     def __str__(self):
-        """Строковое представление для модели."""
+        """Строковое представления для модели."""
+
         return self.title
 
     class Meta:

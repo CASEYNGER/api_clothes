@@ -8,10 +8,13 @@ venv/
 # Database
 db.sqlite3
 
-.pyproject.toml
+# Игнорировать все __pycache__ папки
+__pycache__/
+**/__pycache__/
+*.py[cod]
 
 # Static files
 media/
 static/
 
-pyproject.toml
+
