@@ -46,6 +46,16 @@ http://127.0.0.1:8000/admin/
 python manage.py runserver
 ```
 
+## Эндпоинты документации API
+- *Схема*
+`GET /api/v1/schema/`
+
+- *ReDoc*
+`GET /api/v1/redoc/`
+
+- *Docs*
+`GET /api/v1/docs/`
+
 ## Эндпоинты API
 - *Регистрация нового пользователя*
 `POST /auth/users/`
