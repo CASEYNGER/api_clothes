@@ -24,6 +24,7 @@ class ShoesType(models.Model):
 
         verbose_name = 'Тип обуви'
         verbose_name_plural = 'Типы обуви'
+        ordering = ('code',)
 
 
 class ShoesSize(models.Model):
@@ -141,7 +142,7 @@ class Shoes(TimeStampedMixin, PublishableMixin):
         verbose_name='Материал'
     )
     image = models.ImageField(
-        upload_to='clothes/',
+        upload_to='shoes/',
         blank=True,
         null=True,
         help_text='Добавьте изображение обуви.',

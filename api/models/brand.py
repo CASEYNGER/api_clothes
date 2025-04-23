@@ -7,7 +7,8 @@ class Brand(models.Model):
     name = models.CharField(
         max_length=100,
         verbose_name='Бренд',
-        help_text='Введите название бренда.'
+        help_text='Введите название бренда.',
+        unique=True
     )
     description = models.TextField(
         blank=True,
@@ -33,7 +34,8 @@ class Category(models.Model):
     name = models.CharField(
         max_length=100,
         verbose_name='Категория',
-        help_text='Введите название категории.'
+        help_text='Введите название категории.',
+        unique=True
     )
     description = models.TextField(
         blank=True,
