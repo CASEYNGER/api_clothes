@@ -86,7 +86,17 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+DJOSER = {
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'SEND_CONFIRMATION_EMAIL': False,
+}
+
 REST_FRAMEWORK = {
+    # Авторизация
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+
     # Документация
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
@@ -104,6 +114,5 @@ REST_FRAMEWORK = {
         'user': '10000/day'
     }
 }
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
