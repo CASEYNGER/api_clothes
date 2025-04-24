@@ -18,7 +18,12 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework',
     'djoser',
+    'users',
     'api',
+    'brands',
+    'cloth',
+    'shoes',
+    'commons'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +63,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -87,8 +94,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DJOSER = {
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'SEND_CONFIRMATION_EMAIL': False,
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.UserRegSerializer',
+        'user': 'users.serializers.UserRegSerializer',
+    },
+    'LOGIN_FIELD': 'email'
 }
 
 REST_FRAMEWORK = {

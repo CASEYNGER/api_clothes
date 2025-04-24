@@ -1,13 +1,13 @@
 from django.db import models
 
 from api.validators import validate_cloth_price, validate_article
-from .common import Color, Gender
-from .brand import Brand, Category
-from .mixins import TimeStampedMixin, PublishableMixin
+from commons.models import Color, Gender
+from brands.models import Brand, Category
+from api.mixins import TimeStampedMixin, PublishableMixin
 
 
-class ClothType(models.Model):
-    """Модель типа одежды."""
+class ShoesType(models.Model):
+    """Модель типа обуви."""
 
     name = models.CharField(max_length=50, verbose_name='Тип')
     description = models.TextField(
@@ -22,15 +22,15 @@ class ClothType(models.Model):
     class Meta:
         """Оформление модели в админке."""
 
-        verbose_name = 'Тип одежды'
-        verbose_name_plural = 'Типы одежды'
+        verbose_name = 'Тип обуви'
+        verbose_name_plural = 'Типы обуви'
 
 
-class ClothesSize(models.Model):
-    """Модель размеров одежды."""
+class ShoesSize(models.Model):
+    """Модель размера обуви."""
 
     code = models.CharField(max_length=10, verbose_name='Код', unique=True)
-    label = models.CharField(max_length=50, verbose_name='Название')
+    label = models.CharField(max_length=10, verbose_name='Название')
 
     def __str__(self):
         """Строковое представление для модели."""
@@ -40,21 +40,43 @@ class ClothesSize(models.Model):
     class Meta:
         """Оформление модели в админке."""
 
-        verbose_name = 'Размер'
-        verbose_name_plural = 'Размеры'
+        verbose_name = 'Размер обуви'
+        verbose_name_plural = 'Размеры обуви'
 
 
-class Cloth(TimeStampedMixin, PublishableMixin):
-    """Модель одежды."""
+class ShoesMaterial(models.Model):
+    """Модель материала обуви."""
+
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Основной материал'
+    )
+
+    def __str__(self):
+        """Строковое представление для модели."""
+
+        return self.name
+
+    class Meta:
+        """Оформление модели в админке."""
+
+        verbose_name = 'Материал обуви'
+        verbose_name_plural = 'Материалы обуви'
+
+
+class Shoes(TimeStampedMixin, PublishableMixin):
+    """Модель обуви."""
 
     title = models.CharField(
         max_length=255,
         blank=True,
-        help_text='Введите название элемента одежды (не более 255 символов.)',
+        help_text='Введите название обуви (не более 255 символов.)',
         verbose_name='Название',
     )
     description = models.TextField(
-        blank=True, help_text='Введите описание.', verbose_name='Описание'
+        null=False,
+        help_text='Введите описание.',
+        verbose_name='Описание'
     )
     brand = models.ForeignKey(
         Brand,
@@ -75,31 +97,31 @@ class Cloth(TimeStampedMixin, PublishableMixin):
     article = models.IntegerField(
         validators=[validate_article],
         unique=True,
-        help_text='Введите артикул элемента одежды.',
+        help_text='Введите артикул обуви.',
         verbose_name='Артикул',
     )
-    cloth_type = models.ForeignKey(
-        ClothType,
+    shoes_type = models.ForeignKey(
+        ShoesType,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Укажите тип одежды.',
-        verbose_name='Тип одежды',
+        help_text='Укажите тип обуви.',
+        verbose_name='Тип обуви',
     )
     color = models.ForeignKey(
         Color,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Укажите цвет одежды.',
+        help_text='Укажите цвет обуви.',
         verbose_name='Цвет',
     )
     size = models.ForeignKey(
-        ClothesSize,
+        ShoesSize,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Укажите размер одежды.',
+        help_text='Укажите размер обуви.',
         verbose_name='Размер',
     )
     gender = models.ForeignKey(
@@ -107,14 +129,22 @@ class Cloth(TimeStampedMixin, PublishableMixin):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Укажите, для какого пола элемент одежды.',
+        help_text='Укажите, для какого пола обувь.',
         verbose_name='Пол',
     )
+    material = models.ForeignKey(
+        ShoesMaterial,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='Укажите материал обуви.',
+        verbose_name='Материал'
+    )
     image = models.ImageField(
-        upload_to='clothes/',
+        upload_to='shoes/',
         blank=True,
         null=True,
-        help_text='Добавьте изображение элемента одежды.',
+        help_text='Добавьте изображение обуви.',
         verbose_name='Изображение',
     )
     price = models.IntegerField(
@@ -125,12 +155,12 @@ class Cloth(TimeStampedMixin, PublishableMixin):
     )
 
     def __str__(self):
-        """Строковое представления для модели."""
+        """Строковое представление для модели."""
 
         return self.title
 
     class Meta:
         """Оформление модели в админке."""
 
-        verbose_name = 'Одежда'
-        verbose_name_plural = 'Одежда'
+        verbose_name = 'Обувь'
+        verbose_name_plural = 'Обувь'

@@ -8,12 +8,15 @@ from drf_spectacular.views import (
     SpectacularSwaggerView
 )
 
-from .views import ClothViewSet, ShoesViewSet
+from brands.views import BrandViewSet
+from cloth.views import ClothViewSet
+from shoes.views import ShoesViewSet
 
 
 router_v1 = DefaultRouter()
 router_v1.register(r'clothes', ClothViewSet)
 router_v1.register(r'shoes', ShoesViewSet)
+router_v1.register(r'brands', BrandViewSet)
 
 urlpatterns = [
     path('api/v1/', include(router_v1.urls)),
